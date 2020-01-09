@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Application Cloud</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="logo">
+							<span class="icon fa-diamond"></span>
+						</div>
+						<div class="content">
+							<div class="inner">
+								<h1>Application Cloud</h1>
+								<p>Un moyen facile de gérer vos ressources</p>
+							</div>
+						</div>
+						<nav>
+							<ul>
+								<li><a href="#intro">Introduction</a></li>
+								<li><a href="#work">Mise en place</a></li>
+								<li><a href="#requetesStandard">Requêtes Standard</a></li>
+								<li><a href="#requetesAnalyste">Requêtes Analyste</a></li>
+								<li><a href="#infos">Informations</a></li>
+							</ul>
+						</nav>
+					</header>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Intro -->
+						<article id="intro">
+							<h2 class="major">Introduction</h2>
+							<span class="image main"><img src="images/employee-2.PNG" alt="" /></span>
+							<p> Notre projet consiste à gérer les employées de chaque départements dans une entreprise donnée. Pour répondre aux attendes de ce problématique, nous avons créé une application web pour la gestion des employées aux seins de l’entreprise en fonctions de leurs caractéristiques (Salaires, Département, Titre du poste, …).</p>
+							<p>Nous avons utilisé html et css pour la partie design, et faire appel de requêtes mongo dB en utilisant les scripts JavaScript. L’application dispose d’archiver les objectifs (pages) suivants :
+
+								<ul><a href="#intro">Introduction</a>
+								<br></br>
+									<li>	Un rapport détaillant les différentes étapes de cette application</li></ul>
+
+								<ul><a href="#work">Mise en place</a>
+								<br></br>
+								<li>... </li>
+								</ul>
+								<ul><a href="#requetesStandard">Requêtes Standard</a>
+									<br>Dans cette page on utilise des scripts javaScript pour faire appel au serveur pour enfin obtenir les requêtes demandés.</br>
+									<br></br>
+									<li> 1 – Demande des caractéristiques basique d'un employé par numéro d'employé. </li>
+									<li>	2 – Demander tous les employés d'un département. </li>
+									<li> 3 – La moyenne des salaris et le nombre d'employés pour un numéro de département.</li>
+									<li>	4 - Nombre de salariés pour un numéro de département groupé </li>
+								</ul>
+								<ul>	<a href="#requetesAnalyste">Requêtes Analyste</a>
+									<br></br>
+									<li>	5 – Salaire moyen et Temps moyen qu'une personne reste par catégorie de poste (senior/classique/assistant) avant de passer au poste de catégorie supérieur (on ne prend pas compte si elle change d département ou arrêter de travailler)</li>
+									<li>	6 – On veut pour chaque catégorie d'employé (senior/classique/assistant) le salaire moyen par département </li>
+									<li>	7 – 70 employés restés le plus longtemps dans la boîte (Map/Reduce) </li>
+								</ul>
+								<ul><a href="#infos">Informations</a>
+									<br></br>
+									<li>Informations sur notre travail, data set et présentation de l’équipe.</li>
+								</ul>
+							</p>
+						</article>
+
+						<!-- Mise en place -->
+							<article id="work">
+								<h2 class="major">Mise en place</h2>
+								<h3>Lancement des VM pour la base de données</h3>
+								<p>Nous partons du principe que la base de données à été initialisée et que nous voulons la lancer pour qu’elle soit appelable par l’API qu’utilise l’application. Nous suivrons l’architecture suivante :  </p>
+								<span class="image main"><img src="images/schema.PNG" alt="" /></span>
+								<h3>Lancement du ConfigServer :</h3>
+								<ul>
+									<li>Après log in dans la VM, il faut utiliser de la commande « mongod -f conf/mongo_configSvr.conf » qui configure le serveur grâce au fichier mongo_configSvr.conf.</li>
+									<li>On lance ensuite le serveur en utilisant la commande « mongo --host devincimdb2059 --port 27018 ».</li>
+								</ul>
+								<h3>Lancement des mongod :</h3>
+								<ul>
+									<li>Après log in dans la VM, il faut utiliser de la commande « mongod -f conf/mongo_RSX.conf » qui configure le serveur grâce au fichier mongo_RSX.conf où le X est remplacé par le numéro de la shard.</li>
+									<li>On lance ensuite le serveur en utilisant la commande « mongo --host Y » où Y est remplacé par le nom de la shard</li>
+								</ul>
+								<h3>Lancement du mongos :</h3>
+								<ul>
+									<li>Après log in dans la VM, il faut utiliser de la commande « mongos -f conf/mongos.conf » qui configure le serveur grâce au fichier mongos.conf.</li>
+									<li>On lance ensuite le serveur en utilisant la commande « mongo --host devincimdb2057 --port 30000 ».</li>
+								</ul>
+								<p>Après toute ces étapes, l’API peut faire des requêtes à la base mongo en utilisant l’adresse ssh du serveur mongos.</p>
+							</article>
+
+						<!-- requetes d'un utilisateur standard -->
+							<article id="requetesStandard">
+								<h2 class="major">Requêtes</h2>
+								<span class="image main"><img src="images/mongoDBSchema.PNG" alt="" /></span>
+
+								<h3>Demande des caractéristiques basique d’un employé par numéro d’employé</h3>
+								<h4>Numéro d'employé</h4>
+								<input id="input1">
+								<button onclick="requetes1()">Executer</button>
+								<textarea id="reponse1"></textarea>
+								<br>
+
+								<h3>Demander tous les employés d’un département</h3>
+								<h4>Numéro de département</h4>
+								<input id="input2">
+								<button onclick="requetes2()">Executer</button>
+								<textarea id="reponse2"></textarea>
+								<br>
+
+								<h3>La moyenne des salaires et le nombre d’employés par numéro de département.</h3>
+								<button onclick="requetes3()">Executer</button>
+								<textarea id="reponse3"></textarea>
+								<br>
+
+								<h3>Nombre de salariés par numéro de département groupé par tranche de 3 mois.</h3>
+								<button onclick="requetes4()">Executer</button>
+								<textarea id="reponse4"></textarea>
+								<br>
+
+							</article>
+							<!-- requetes d'un analyste -->
+							<article id="requetesAnalyste">
+								<h2 class="major">Requêtes</h2>
+								<span class="image main"><img src="images/mongoDBSchema.PNG" alt="" /></span>
+
+								<h3>Salaire moyen et Temps moyen qu’une personne reste par catégorie de poste (senior/classique/assistant) avant de passer au poste de catégorie supérieur</h3>
+								<button onclick="requetes5()">Executer</button>
+								<textarea id="reponse5"></textarea>
+								<br>
+
+								<h3>Pour chaque catégorie d’employé (senior/classique/assistant) le salaire moyen par département.</h3>
+								<button onclick="requetes6()">Executer</button>
+								<textarea id="reponse6"></textarea>
+								<br>
+
+								<h3>Les 70 employés restés le plus longtemps dans la société.</h3>
+								<button onclick="requetes7()">Executer</button>
+								<textarea id="reponse7"></textarea>
+								<br>
+
+							</article>
+
+						<!-- Infos -->
+							<article id="infos">
+								<h2 class="major">Informations</h2>
+								<h3>Remerciements</h3>
+								<p>Merci à M. Travers de nous avoir aider dans notre choix de solutions tout au long de l'année.<br>Merci à toute l'équipe d'avoir produit un travail de qualité dans les temps demandés.</p>							
+								<h3>L'Équipe</h3>
+									<p>Ismail Mahamat  -  Mazière David  -  Van Hecke Louis  -  Veyssière Emmanuel</p>
+								<h3>Lien Github </h3>
+									<ul class="icons"><li><a href="https://github.com/EmmanuelVey94/ApplicationCloud" class="icon fa-github"><span class="label">GitHub</span></a></li></ul>								
+								<h3>Lien vers la base de donnée SQL</h3>
+									<a href=" https://relational.fit.cvut.cz/dataset/Employee"><span class="label"><img height="50" src="images/logo-sql.png" alt="" /></span></a>							
+							</article>						
+					</div>
+				<!-- Footer -->
+					<footer id="footer">
+					</footer>
+			</div>
+
+		<!-- BG -->
+			<div id="bg"></div>
+
+		<!-- Scripts -->
+			<script src="assets/js/request.js"></script>
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
